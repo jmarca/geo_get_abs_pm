@@ -1,0 +1,32 @@
+{
+  "name": "geo_get_abs_pm",
+  "version": "0.0.1",
+  "description": "compute the absolute postmile, given the CA_PM, the county, and the route number",
+  "main": "lib/get_absolute_post_mile.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "async": "~0.2.8",
+    "pg": "~1.1.0",
+    "lodash": "~1.2.1",
+    "should": "~1.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmarca/geo_get_abs_pm.git"
+  },
+  "keywords": [
+    "ca_pm",
+    "abs_pm",
+    "postmile",
+    "California"
+  ],
+  "author": "James E. Marca",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
