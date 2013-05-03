@@ -29,4 +29,24 @@ describe('get wim sites',function(){
                })
            return null
        })
+    it('should get with a limit'
+      ,function(done){
+           // open file, pass to doc_get_dy
+           get_wims({limit:10}
+                   ,function(e,result){
+                        should.exist(result)
+                        result.should.have.property('length',9) // one of the first 10 is bad
+                        console.log(result.length)
+                        _.each(result
+                              ,function(row){
+                                   row.should.have.property('properties')
+                                   _.each(row.properties
+                                         ,function(property){
+                                              property.should.have.property('cal_pm_numeric')
+                                          })
+                               })
+                            return done()
+                    })
+           return null
+       })
 })
