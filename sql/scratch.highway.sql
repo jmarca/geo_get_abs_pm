@@ -59,14 +59,29 @@ select a.site_no, a.refnum, a.direction, a.meas as a_meas, b.meas as b_meas from
        from sniplinelen )
 
 ;
-    select refnum,direction,st_length(st_transform(seg_geom,32611))/1000 as len,seg_geom
-          from seg
-';
-  RETURN QUERY EXECUTE var_sql USING highway,start_km,end_km,in_county,in_statefp;
-  RETURN;
-END;
-$BODY$
-  LANGUAGE 'plpgsql' IMMUTABLE STRICT;
 
-ALTER FUNCTION osm.highway_section(highway numeric,start_km numeric,end_km numeric,in_county varchar, in_state text)
-OWNER TO postgres;
+
+-- more scratch work for get counties code
+
+select countyfp
+       from county c
+       where st_covers(c.the_geom,st_transform(st_setsrid(ST_GeomFromGeoJSON('{"type":"Point","crs": {"type": "name","properties": {"name": "EPSG:4326" }},"coordinates": [-121.4,38.175 ]}'),4326),4269))
+
+
+
+{
+           "type": "Point",
+           "crs": {
+               "type": "name",
+               "properties": {
+                   "name": "EPSG:4326"
+               }
+           },
+           "coordinates": [
+               -121.4,
+               38.175
+           ]
+       }
+
+
+SELECT ST_AsText(ST_GeomFromGeoJSON('{"type":"Point","crs": {"type": "name","properties": {"name": "EPSG:4326" }},"coordinates": [-121.4,38.175 ]}')) As wkt;
