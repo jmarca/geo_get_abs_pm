@@ -16,7 +16,7 @@ var get_abs_pm = require('../lib/get_absolute_post_mile')
 var getter = get_abs_pm({'username':user
                         ,'password':pass
                         ,'host':host
-                        ,'port':port}xo)
+                        ,'port':port})
 
 describe('get abs postmiles',function(){
 
