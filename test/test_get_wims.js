@@ -15,12 +15,18 @@ describe('get wim sites',function(){
            get_wims(
                function(e,result){
                    should.exist(result)
-                   result.should.have.property.rows()
-                   _.each(result.rows)
+                   result.should.have.property('length',218)
+                   console.log(result.length)
+                   _.each(result
+                         ,function(row){
+                              row.should.have.property('properties')
+                              _.each(row.properties
+                                    ,function(property){
+                                         property.should.have.property('cal_pm_numeric')
+                                     })
+                          })
                    return done()
                })
            return null
-
        })
-
 })
