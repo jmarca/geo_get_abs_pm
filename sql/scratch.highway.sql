@@ -116,7 +116,64 @@ WITH
     measure_a as (select refnum, direction,
                   st_line_locate_point(hg.routeline,pt) as meas
                   from hwy_geom as hg join measure_snip using(refnum,direction) ),
+
     len_a as (select m.*,
               st_length(st_transform(st_line_substring(h.routeline,0,m.meas),32611))*(0.621371/1000) as len
               from measure_a as m join hwy_geom h using(refnum,direction))
     select len from len_a
+
+
+-- aha, multiline stupidness
+
+'SRID=4326;POINT(-119.846646354725 36.7801523066816)'
+
+WITH
+    hwy_geom(refnum,direction,routeline)
+         as (select nrl.refnum,nrl.direction,nrl.routeline
+             from tempseg.numbered_route_lines nrl
+             where nrl.refnum=99
+                   and nrl.refnum::text = nrl.netref
+                   and nrl.direction in ('north','east','both')
+             ),
+    pt as (select st_pointfromtext('POINT(-119.846646354725 36.7801523066816)',4326) as pt ),
+    measure_a as (select refnum, direction,
+                  st_line_locate_point(hg.routeline,pt.pt) as meas
+                  from hwy_geom as hg,pt)
+select * from measure_a;
+
+
+WITH
+    hwy_geom(refnum,direction,routeline)
+         as (select nrl.refnum,nrl.direction,nrl.routeline
+             from tempseg.numbered_route_lines nrl
+             where nrl.refnum=99
+                   and nrl.refnum::text = nrl.netref
+                   and nrl.direction in ('north','east','both')
+             ),
+    pt as (select st_pointfromtext('POINT(-119.846646354725 36.7801523066816)',4326) as pt ),
+    lines as (select (st_dump(routeline)).geom as dump_geom from hwy_geom ),
+    measure_a as (select
+                  st_length(st_transform(lines.dump_geom,32611)) as len,
+                  st_line_locate_point(lines.dump_geom,pt.pt) as meas
+                  from lines,pt)
+select * from measure_a;
+
+
+ WITH
+    hwy_geom(refnum,direction,routeline)
+         as (select nrl.refnum,nrl.direction,nrl.routeline
+             from tempseg.numbered_route_lines nrl
+             where nrl.refnum=99
+                   and nrl.refnum::text = nrl.netref
+                   and nrl.direction in ('north','east','both')
+             ),
+    pt as (select st_pointfromtext('POINT(-119.846646354725 36.7801523066816)',4326) as pt ),
+    lines as (select (st_dump(routeline)) as dump_geom,direction from hwy_geom ),
+    measure_a as (select
+                  st_length(st_transform((lines.dump_geom).geom,32611)) as len,
+                  st_line_locate_point((lines.dump_geom).geom,pt.pt) as meas,(lines.dump_geom).path[1] as path, direction
+                  from lines,pt)
+select * from measure_a;
+
+-- multiple components (9), but the geojson in qgis shows just two.
+-- So I can probably merge this down to jsut two components

@@ -24,7 +24,12 @@ describe('get wim sites',function(){
                                     ,function(property){
                                          property.should.have.property('cal_pm_numeric')
                                          property.should.have.property('county')
-                                         property.should.have.property('abs_pm')
+                                         if( property.abs_pm === undefined ){
+                                             var toolong = property.toolong
+                                             var multiline = property.multiline
+                                             var test = multiline || toolong
+                                             test.should.be.ok
+                                         }
                                      })
                           })
                    return done()

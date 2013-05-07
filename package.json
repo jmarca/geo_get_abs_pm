@@ -7,10 +7,12 @@
     "test": "test"
   },
   "dependencies": {
-      "async": "~0.2.8",
-      "pg": "~1.1.0",
+      "async": "",
+      "pg": "",
       "couchdb_get_views":"git://github.com/jmarca/couchdb_get_views.git",
-      "lodash": "~1.2.1"
+      "couchdb_bulkdoc_saver":"git://github.com/jmarca/couchdb_bulkdoc_saver.git",
+      "lodash": "",
+      "optimist":""
   },
   "devDependencies": {
       "should": "~1.2.2"
