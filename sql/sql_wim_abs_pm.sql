@@ -1,12 +1,4 @@
--- DROP TYPE IF EXISTS hwy_seg CASCADE;
--- CREATE TYPE hwy_seg AS (
---        refnum numeric,
---        direction text,
---        len_km double precision,
---        seg_geom  geometry
--- );
-
-CREATE OR REPLACE FUNCTION osm.wim_abs_pm(IN highway numeric, IN wim_ewkt varchar, IN vds_ewkt varchar, IN vds_abs_pm numeric)
+CREATE OR REPLACE FUNCTION tempseg.wim_abs_pm(IN highway integer, IN wim_ewkt text, IN vds_ewkt text, IN vds_abs_pm double precision)
 returns numeric
 as
 $BODY$
@@ -71,5 +63,5 @@ END;
 $BODY$
   LANGUAGE 'plpgsql' IMMUTABLE STRICT;
 
-ALTER FUNCTION osm.wim_abs_pm(IN highway numeric, IN wim_ewkt varchar, IN vds_ewkt varchar, IN vds_abs_pm numeric)
+ALTER FUNCTION tempseg.wim_abs_pm(IN highway integer, IN wim_ewkt text, IN vds_ewkt text, IN vds_abs_pm double precision)
 OWNER TO postgres;

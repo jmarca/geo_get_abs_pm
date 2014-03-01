@@ -74,7 +74,6 @@ select refnum,direction,len,st_asewkt(geom) from sniplinelen
 
 -- -------------
 
-
 select ST_asewkt (geom), wim_id from wim_points_4326 join geom_points_4326 using (gid) where wim_id=101;
 
 SRID=4326;POINT(-117.124682377 32.8509435284) |    101
@@ -146,3 +145,40 @@ WITH
               st_length(st_transform(st_line_substring(h.routeline,0,m.meas),32611))*(0.621371/1000) as len
               from measure_v as m join hwy_geom h using(refnum,direction))
     select abs_pm +(len_w.len - len_v.len) as wim_abs_pm from len_w,len_v;
+
+
+
+
+-- nearest neighbor code
+
+with
+cnty as (
+    select cf.name,
+        st_transform(st_buffer(st_transform(the_geom,32611),5),4326)
+        as the_geom
+    from carb_counties_aligned_03 cc
+    join counties_fips cf on (lower(cf.name)=lower(cc.name))
+    where fips='06059'
+),
+wim_info as (
+    select w.site_no,wf.freeway_id as wim_freeway,w.cal_pm,geom as wim_geom
+    from wim_stations w
+    join wim_points_4326 wp on(w.site_no =wp.wim_id)
+    join geom_points_4326 using (gid)
+    join wim_freeway wf on(wf.wim_id=w.site_no)
+    where site_no=103
+),
+vds_info as (
+    select vds.vds_id,vds.abs_pm as vds_abs_pm,geom as vds_geom,w.*,st_distance(geom,w.wim_geom) as dist
+    from vds_geoview_full vds
+    join cnty on (st_contains(cnty.the_geom,vds.geom))
+    join wim_info w on (vds.freeway_id = w.wim_freeway)
+    where vds.abs_pm is not null
+    order by dist
+    limit 1
+)
+select tempseg.wim_abs_pm(wim_freeway,
+                          st_asewkt(wim_geom),
+                          st_asewkt(vds_geom),
+                          vds_abs_pm)
+from vds_info;
