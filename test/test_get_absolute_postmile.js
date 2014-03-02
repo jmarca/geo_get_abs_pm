@@ -103,3 +103,58 @@ describe('get abs from wim and nearby vds',function(){
        })
 
 })
+describe('get abs from abs_postmile_vds_multiline',function(){
+    var getter = get_abs_pm.abs_postmile_vds_multiline({'username':user
+                                                       ,'password':pass
+                                                       ,'host':host
+                                                       ,'port':port})
+
+
+    it('should get wim wim.10.N in 019'
+      ,function(done){
+           // open file, pass to doc_get_dy
+           getter({'wim_id':'wim.10.N',
+                   'county':'019'}
+                 ,function(e,result){
+                      should.not.exist(e)
+                      should.exist(result)
+                      result.should.have.keys('abs_pm','geojson')
+                      result.abs_pm.should.be.greaterThan(137.14)
+                      return done()
+                  })
+           return null
+
+       })
+    it('should get wim wim.14.E in 073'
+      ,function(done){
+           // open file, pass to doc_get_dy
+           getter({'wim_id':'wim.14.E',
+                   'county':'073'}
+                 ,function(e,result){
+                      should.not.exist(e)
+                      should.exist(result)
+                      result.should.have.keys('abs_pm','geojson')
+                      result.abs_pm.should.eql(10.6950924144901)
+                      return done()
+                  })
+           return null
+
+       })
+
+    it('should get wim wim.102.N in 047'
+      ,function(done){
+           // open file, pass to doc_get_dy
+           getter({'wim_id':'wim.102.N',
+                   'county':'047'}
+                 ,function(e,result){
+                      should.not.exist(e)
+                      should.exist(result)
+                      result.should.have.keys('abs_pm','geojson')
+                      result.abs_pm.should.be.approximately(206.2,0.05)
+                      return done()
+                  })
+           return null
+
+       })
+
+})
