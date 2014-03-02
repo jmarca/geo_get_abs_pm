@@ -12,14 +12,15 @@ describe('get wim sites',function(){
     it('should get all wim sites, fix them'
       ,function(done){
            // open file, pass to doc_get_dy
-           fix_wims({limit:10}
+           fix_wims({limit:20}
                    ,function(e,result){
                    should.exist(result)
-                   result.should.have.property('length',9)
-                   console.log(result.length)
+                   result.should.have.property('length',19)
                    _.each(result
                          ,function(row){
                               row.should.have.property('properties')
+                              console.log(row._id)
+                              console.log(row.properties)
                               _.each(row.properties
                                     ,function(property){
                                          property.should.have.property('cal_pm_numeric')

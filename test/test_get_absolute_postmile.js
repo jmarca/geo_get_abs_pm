@@ -34,6 +34,20 @@ describe('get abs from ca postmile',function(){
            return null
 
        })
+    it('should get wim 107, county 007'
+      ,function(done){
+           // open file, pass to doc_get_dy
+           getter({'route':405
+                  ,'ca_pm':18.6
+                  ,'county':'059'}
+                 ,function(e,result){
+                      should.exist(result)
+                      result.should.eql(18.534221613105)
+                      return done()
+                  })
+           return null
+
+       })
 
 })
 describe('get abs from wim and nearby vds',function(){
